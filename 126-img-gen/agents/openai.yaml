@@ -1,0 +1,4 @@
+interface:
+  display_name: "126 Image Generator"
+  short_description: "Generate and edit images with 126 API."
+  default_prompt: "Use $126-img-gen to generate an image with 126 API and save the result locally."
