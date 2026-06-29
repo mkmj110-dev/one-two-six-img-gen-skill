@@ -2,7 +2,8 @@ param(
   [ValidateSet("all", "codex", "claude")]
   [string]$Target = "all",
   [string]$Repo = "mkmj110-dev/one-two-six-img-gen-skill",
-  [string]$Ref = "main"
+  [string]$Ref = "main",
+  [string]$InstallHome = [Environment]::GetFolderPath("UserProfile")
 )
 
 $ErrorActionPreference = "Stop"
@@ -43,7 +44,7 @@ try {
     throw "Could not find 126-img-gen/SKILL.md in downloaded archive."
   }
 
-  $homeDir = [Environment]::GetFolderPath("UserProfile")
+  $homeDir = $InstallHome
   if ($Target -eq "all" -or $Target -eq "codex") {
     Install-Skill (Join-Path $homeDir ".codex\skills")
   }
