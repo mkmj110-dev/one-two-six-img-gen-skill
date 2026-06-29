@@ -1,34 +1,48 @@
 ---
 name: 126-img-gen
-description: Generate, edit, and download images through 126 API image endpoints. Use when the user asks to create images with 126 API, image2, gpt-image-2, gpt-image-2-2K, gpt-image-2-4K, /v1/images/generations, /v1/images/edits, or the async /v1/videos image task API; also use when converting prompts into ready-to-run image API calls or polling image tasks.
+description: Generate, edit, poll, and download images through 126 API image endpoints. Use when the user asks to create images with 126 API, image2, gpt-image-2, gpt-image-2-2K, gpt-image-2-4K, /v1/images/generations, /v1/images/edits, or the async /v1/videos image task API; also use when converting prompts into ready-to-run image API calls or polling image tasks.
 ---
 
 # 126 Img Gen
 
 ## Overview
 
-Use this skill to call 126 API image-generation endpoints and save the resulting image locally. It covers the synchronous `image2` OpenAI-compatible image endpoints and the asynchronous `gpt-image-2` task API.
+Use this skill to call 126 API image-generation endpoints and save the resulting image locally. It covers synchronous `image2` OpenAI-compatible image endpoints and asynchronous `gpt-image-2` image tasks.
+
+Default base URL is `https://chx126.xyz/v1`. Read the API key from `ONE_TWO_SIX_API_KEY`, `126_API_KEY`, `OPENAI_API_KEY`, or pass `--api-key`.
 
 ## Quick Start
 
-Prefer the bundled script for real API calls:
+Prefer the bundled script for real API calls. Resolve the script path from the installed skill directory:
 
 ```powershell
 $env:ONE_TWO_SIX_API_KEY = "sk-..."
-python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
-  --mode image2 `
-  --prompt "生成一张电商主图，白色背景，主体是一只金属质感保温杯" `
-  --out output.png
+python ~/.codex/skills/126-img-gen/scripts/126_img_gen.py `
+  --mode gpt-image-2 `
+  --model gpt-image-2-2K `
+  --prompt "一张2K高清写实风景摄影，美丽的北戴河海滨，清晨金色阳光洒在海面，无文字，无水印" `
+  --aspect-ratio 16:9 `
+  --out beidaihe-2k.png
 ```
 
-Default base URL is `https://chx126.xyz/v1`. Read the API key from `ONE_TWO_SIX_API_KEY`, `126_API_KEY`, `OPENAI_API_KEY`, or pass `--api-key`.
+For Claude Code installs, the equivalent script path is usually:
+
+```text
+~/.claude/skills/126-img-gen/scripts/126_img_gen.py
+```
+
+When running from inside the skill folder, use:
+
+```powershell
+python ./scripts/126_img_gen.py --mode image2 --prompt "生成一张电商主图，白色背景，主体是一只金属质感保温杯" --out output.png
+```
 
 ## Choose The Endpoint
 
 - Use `--mode image2` for synchronous text-to-image with `POST /v1/images/generations`.
 - Use `--mode image2-edit` for synchronous image editing with `POST /v1/images/edits`.
 - Use `--mode gpt-image-2` for asynchronous text-to-image or image-to-image with `POST /v1/videos` and polling `GET /v1/videos/{task_id}`.
-- Use `--model gpt-image-2-2K` or `--model gpt-image-2-4K` when the user asks for the higher-resolution async models. Keep `K` uppercase.
+- Use `--model gpt-image-2-2K` or `--model gpt-image-2-4K` when the user asks for higher-resolution async models. Keep `K` uppercase.
 
 Do not use or document video-generation models for this skill. The async image endpoint uses the `/v1/videos` path, but the relevant object is an image task.
 
@@ -37,7 +51,7 @@ Do not use or document video-generation models for this skill. The async image e
 Generate with `image2`:
 
 ```powershell
-python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
+python ./scripts/126_img_gen.py `
   --mode image2 `
   --prompt "一张极简科技感海报，主题是 AI API 网关" `
   --size 1024x1024 `
@@ -47,7 +61,7 @@ python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
 Edit an existing image:
 
 ```powershell
-python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
+python ./scripts/126_img_gen.py `
   --mode image2-edit `
   --prompt "把杯子改成磨砂黑色，保留背景和构图" `
   --image input.png `
@@ -57,7 +71,7 @@ python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
 Submit and poll an async `gpt-image-2` task:
 
 ```powershell
-python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
+python ./scripts/126_img_gen.py `
   --mode gpt-image-2 `
   --model gpt-image-2-4K `
   --prompt "生成一张高端护肤品广告图，金色瓶身，黑色背景" `
@@ -68,7 +82,7 @@ python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
 Use reference images with async image-to-image:
 
 ```powershell
-python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
+python ./scripts/126_img_gen.py `
   --mode gpt-image-2 `
   --prompt "将参考图改成油画风格" `
   --ref-image "https://example.com/reference.png" `
@@ -95,14 +109,3 @@ python C:\Users\32712\.codex\skills\126-img-gen\scripts\126_img_gen.py `
 
 - `scripts/126_img_gen.py`: CLI for generating/editing images and downloading the first result.
 - `references/api.md`: concise endpoint and parameter reference. Read it when building custom requests or debugging API payloads.
-
-**Examples from other skills:**
-- Brand styling: PowerPoint template files (.pptx), logo files
-- Frontend builder: HTML/React boilerplate project directories
-- Typography: Font files (.ttf, .woff2)
-
-**Appropriate for:** Templates, boilerplate code, document templates, images, icons, fonts, or any files meant to be copied or used in the final output.
-
----
-
-**Not every skill requires all three types of resources.**
