@@ -51,18 +51,20 @@ curl -fsSL https://raw.githubusercontent.com/mkmj110-dev/one-two-six-img-gen-ski
 
 ## 配置
 
-运行时设置你的 API key。不要把真实 key 提交到仓库。
+运行时需要设置 API key 和 API base URL。不要把真实 key 提交到仓库。
 
 PowerShell，仅当前窗口生效：
 
 ```powershell
 $env:ONE_TWO_SIX_API_KEY = "sk-..."
+$env:ONE_TWO_SIX_BASE_URL = "https://chx126.xyz/v1"
 ```
 
 PowerShell，持久保存到用户环境变量，适用于没有从同一个窗口启动的 Codex / Claude 会话：
 
 ```powershell
 [Environment]::SetEnvironmentVariable("ONE_TWO_SIX_API_KEY", "sk-...", "User")
+[Environment]::SetEnvironmentVariable("ONE_TWO_SIX_BASE_URL", "https://chx126.xyz/v1", "User")
 [Environment]::GetEnvironmentVariable("ONE_TWO_SIX_API_KEY", "User").Length
 ```
 
@@ -72,11 +74,6 @@ Bash：
 
 ```bash
 export ONE_TWO_SIX_API_KEY="sk-..."
-```
-
-可选配置：
-
-```bash
 export ONE_TWO_SIX_BASE_URL="https://chx126.xyz/v1"
 ```
 
